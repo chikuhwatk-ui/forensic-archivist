@@ -31,7 +31,7 @@ export function TopBar() {
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-3 pl-6 border-l border-slate-200">
           <div className="text-right">
-            <div className="text-xs font-bold text-blue-900">Archivist #402</div>
+            <div className="text-xs font-bold text-blue-900">Tendaishe Chitate</div>
             <div className="text-[11px] text-slate-400">Senior Auditor</div>
           </div>
           <UserCircle size={32} className="text-slate-300" />

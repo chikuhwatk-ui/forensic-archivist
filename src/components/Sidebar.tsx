@@ -57,7 +57,7 @@ export function Sidebar() {
               Forensic Archivist
             </div>
             <div className="text-[11px] uppercase tracking-widest text-slate-500 font-bold">
-              Precision Ledger
+              Tendaishe Chitate
             </div>
           </div>
         </div>
