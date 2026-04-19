@@ -10,7 +10,6 @@ import {
   FileWarning,
   Archive,
   Settings as SettingsIcon,
-  FlaskConical,
   Download,
   LucideIcon,
 } from 'lucide-react';
@@ -186,19 +185,6 @@ export function UserGuide() {
           '"Reset to Defaults" restores factory settings.',
         ]}
         whatToCheck="Default thresholds follow ISA 240 / ISA 315 guidance for mid-size engagements. Tighten or loosen based on the materiality of the audit."
-      />
-
-      <ScreenCard
-        icon={FlaskConical}
-        title="Sample Data"
-        subtitle="For demos & practice"
-        purpose="Two downloadable ready-made reconciliation scenarios so you can try the full flow without needing production data."
-        whatYouDo={[
-          'Pick a set — each set has a matched pair of bank statement and cashbook/GL files.',
-          'Click Download .xlsx on both cards in the same set, then upload them on the Data Imports screen.',
-          'Run the flow end to end to see every feature trigger at least once.',
-        ]}
-        whatToCheck="Each set exercises the full feature matrix. Set 1 (Zambezi Trading) and Set 2 (Kopje Mining Supplies) use different parties and periods so you can demo twice without repetition."
       />
 
       {/* Tips */}
