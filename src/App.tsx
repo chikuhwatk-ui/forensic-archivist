@@ -8,6 +8,7 @@ import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
 import { ToastContainer } from './components/ToastContainer';
 import { JourneyStepper, WORKFLOW_ROUTES } from './components/JourneyStepper';
+import { ScrollToTop } from './components/ScrollToTop';
 import { Dashboard } from './views/Dashboard';
 import { DataImport } from './views/DataImport';
 import { MatchingWorkspace } from './views/MatchingWorkspace';
@@ -26,6 +27,7 @@ function MaybeStepper() {
 export default function App() {
   return (
     <HashRouter>
+      <ScrollToTop />
       <div className="min-h-screen bg-slate-50">
         <a href="#main-content" className="skip-to-content">Skip to main content</a>
         <Sidebar />
