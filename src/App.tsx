@@ -14,6 +14,7 @@ import { ForensicToolbox } from './views/ForensicToolbox';
 import { ExceptionReport } from './views/ExceptionReport';
 import { AuditVault } from './views/AuditVault';
 import { Settings } from './views/Settings';
+import { SampleData } from './views/SampleData';
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
             <Route path="/exceptions" element={<ExceptionReport />} />
             <Route path="/vault" element={<AuditVault />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/sample" element={<SampleData />} />
           </Routes>
         </main>
         <ToastContainer />

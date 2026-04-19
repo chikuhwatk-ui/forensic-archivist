@@ -9,6 +9,7 @@ import {
   FileWarning,
   Settings,
   Plus,
+  FlaskConical,
 } from 'lucide-react';
 import { cn } from '../lib/cn';
 import { ConfirmDialog } from './ConfirmDialog';
@@ -25,6 +26,7 @@ const navItems = [
   { to: '/exceptions', label: 'Exception Report', icon: FileWarning },
   { to: '/vault', label: 'Audit Vault', icon: Archive },
   { to: '/settings', label: 'Settings', icon: Settings },
+  { to: '/sample', label: 'Sample Data', icon: FlaskConical },
 ];
 
 export function Sidebar() {
