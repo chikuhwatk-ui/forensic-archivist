@@ -20,7 +20,6 @@
     "electron:build:all": "npm run build && npm run electron:compile && electron-builder --win --mac --linux"
   },
   "dependencies": {
-    "@google/genai": "^1.29.0",
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-react": "^5.0.4",
     "clsx": "^2.1.1",

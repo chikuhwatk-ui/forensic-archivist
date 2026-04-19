@@ -44,5 +44,4 @@ Forensic Archivist is a Forensic Bank Reconciliation Analytics Tool. It imports 
 
 ## Environment
 
-- `GEMINI_API_KEY` in `.env.local` — injected into client bundle via `vite.config.ts` define
 - Path alias: `@` maps to project root
