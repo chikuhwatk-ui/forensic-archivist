@@ -1,7 +1,9 @@
 import { useEffect, useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { ArrowLeftRight, Play, CheckCircle2, XCircle, Link2, Scale } from 'lucide-react';
+import { ArrowLeftRight, Play, CheckCircle2, XCircle, Link2, Scale, CloudUpload, FileWarning } from 'lucide-react';
 import { DataTable, Column } from '../components/DataTable';
+import { NextStepCTA } from '../components/NextStepCTA';
 import { useTransactionStore } from '../stores/transactionStore';
 import { useReconciliationStore } from '../stores/reconciliationStore';
 import { useRiskStore } from '../stores/riskStore';
@@ -44,7 +46,7 @@ export function MatchingWorkspace() {
     addToast({
       type: 'success',
       title: 'Reconciliation complete',
-      message: `Processed ${totalTxNow} transactions. Risk analysis applied.`,
+      message: `Processed ${totalTxNow} transactions. Next: review flagged items in Exception Report.`,
     });
   };
 
@@ -139,28 +141,73 @@ export function MatchingWorkspace() {
 
   return (
     <div className="space-y-8">
-      <header className="flex items-center justify-between">
+      <header className="flex items-start justify-between gap-6">
         <div>
           <h1 className="text-3xl font-extrabold font-headline text-primary tracking-tight">
             Matching Workspace
           </h1>
-          <p className="text-slate-500 mt-1">
-            Automatically match bank transactions with cashbook entries.
+          <p className="text-slate-500 mt-1 max-w-xl">
+            Match bank transactions against cashbook entries and score each transaction for
+            forensic risk in one pass.
           </p>
         </div>
-        <button
-          onClick={handleRunReconciliation}
-          disabled={loading || totalTx === 0}
-          className="bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {loading ? (
-            <span className="animate-spin">⟳</span>
-          ) : (
-            <Play size={16} />
-          )}
-          Run Reconciliation
-        </button>
+        <div className="flex flex-col items-end gap-1 shrink-0">
+          <button
+            onClick={handleRunReconciliation}
+            disabled={loading || totalTx === 0}
+            className="bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <span className="animate-spin">⟳</span>
+            ) : (
+              <Play size={16} />
+            )}
+            Match & Analyze Risk
+          </button>
+          <span className="text-[11px] text-slate-400">
+            Runs matching and forensic risk rules together
+          </span>
+        </div>
       </header>
+
+      {totalTx === 0 && (
+        <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 flex items-center gap-5">
+          <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+            <CloudUpload size={22} />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-headline font-bold text-blue-950 text-lg">
+              No transactions loaded
+            </h3>
+            <p className="text-sm text-slate-600 mt-1">
+              Upload a bank statement and cashbook/GL file before running matching.
+            </p>
+          </div>
+          <Link
+            to="/import"
+            className="bg-primary text-white px-4 py-2 rounded-lg font-headline font-bold text-sm flex items-center gap-2 shadow-md shadow-primary/20 shrink-0"
+          >
+            Go to Data Imports
+          </Link>
+        </div>
+      )}
+
+      {totalTx > 0 && matches.length === 0 && !loading && (
+        <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 flex items-start gap-4">
+          <div className="w-10 h-10 rounded-full bg-primary/15 text-primary flex items-center justify-center shrink-0">
+            <Play size={18} />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-headline font-bold text-blue-950">
+              Ready to run — {totalTx} transactions loaded
+            </h3>
+            <p className="text-sm text-slate-600 mt-1">
+              Nothing has been matched yet. Click <span className="font-semibold text-primary">Match &amp; Analyze Risk</span>{' '}
+              above to run the greedy matching algorithm and apply all six forensic risk rules.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
@@ -306,6 +353,15 @@ export function MatchingWorkspace() {
             </div>
           </div>
         </div>
+      )}
+
+      {matches.length > 0 && (
+        <NextStepCTA
+          label="Review flagged items"
+          description="Open the Exception Report to review transactions flagged by the forensic risk rules."
+          to="/exceptions"
+          icon={FileWarning}
+        />
       )}
     </div>
   );

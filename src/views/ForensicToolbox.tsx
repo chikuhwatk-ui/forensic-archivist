@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import {
   Microscope,
   AlertTriangle,
   ShieldCheck,
-  Play,
   Filter,
+  ArrowLeftRight,
 } from 'lucide-react';
 import {
   BarChart,
@@ -147,8 +148,10 @@ export function ForensicToolbox() {
           <h1 className="text-3xl font-extrabold font-headline text-primary tracking-tight">
             Forensic Toolbox
           </h1>
-          <p className="text-slate-500 mt-1">
-            Automated risk detection and scoring — ISA 240 fraud indicators.
+          <p className="text-slate-500 mt-1 max-w-xl">
+            Deep-dive view of the forensic risk engine (ISA 240 indicators). Risk
+            analysis already runs automatically during <span className="font-semibold">Match &amp; Analyze Risk</span>{' '}
+            — use this page to re-run after changing settings, or to filter by risk level.
           </p>
         </div>
         <button
@@ -171,9 +174,32 @@ export function ForensicToolbox() {
           ) : (
             <Microscope size={16} />
           )}
-          Run Risk Analysis
+          Re-run Risk Analysis
         </button>
       </header>
+
+      {totalTx === 0 && (
+        <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 flex items-center gap-5">
+          <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+            <AlertTriangle size={22} />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-headline font-bold text-blue-950 text-lg">
+              No transactions to analyze
+            </h3>
+            <p className="text-sm text-slate-600 mt-1">
+              Import a bank statement and cashbook/GL first, then run matching — the risk
+              engine will populate from there.
+            </p>
+          </div>
+          <Link
+            to="/matching"
+            className="bg-primary text-white px-4 py-2 rounded-lg font-headline font-bold text-sm flex items-center gap-2 shadow-md shadow-primary/20 shrink-0"
+          >
+            <ArrowLeftRight size={15} /> Go to Matching
+          </Link>
+        </div>
+      )}
 
       {/* Risk Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -234,7 +260,7 @@ export function ForensicToolbox() {
           keyExtractor={(r) => r.id}
           onRowClick={setSelectedAssessment}
           maxHeight="500px"
-          emptyMessage="Run risk analysis to see flagged transactions"
+          emptyMessage="No flagged transactions yet. Run Match & Analyze Risk from the Matching Workspace."
         />
       </div>
 

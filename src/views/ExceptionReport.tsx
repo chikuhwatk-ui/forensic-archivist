@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import {
   AlertTriangle,
@@ -8,15 +8,18 @@ import {
   Filter,
   Search,
   FileWarning,
+  Archive,
+  ArrowLeftRight,
 } from 'lucide-react';
 import { DataTable, Column } from '../components/DataTable';
+import { NextStepCTA } from '../components/NextStepCTA';
 import { RiskBadge } from '../components/RiskBadge';
 import { StatCard } from '../components/StatCard';
 import { useTransactionStore } from '../stores/transactionStore';
 import { useRiskStore } from '../stores/riskStore';
 import { useReconciliationStore } from '../stores/reconciliationStore';
 import { generateReconciliationReport } from '../lib/pdfReport';
-import { RiskAssessment, RiskLevel, Transaction } from '../types';
+import { RiskAssessment } from '../types';
 
 const RULE_LABELS: Record<string, string> = {
   aging: 'Aging (>30 days)',
@@ -255,14 +258,28 @@ export function ExceptionReport() {
             keyExtractor={(r) => r.id}
             maxHeight="600px"
           />
+        ) : assessments.length === 0 ? (
+          <div className="text-center py-12">
+            <AlertTriangle size={48} className="mx-auto text-amber-400 mb-3" />
+            <h4 className="font-bold text-blue-950 font-headline text-lg">No risk analysis run yet</h4>
+            <p className="text-sm text-slate-500 mt-1 max-w-md mx-auto">
+              Exception Report reads from the forensic risk engine. Run matching &amp; risk
+              analysis first to see flagged transactions here.
+            </p>
+            <Link
+              to="/matching"
+              className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-headline font-bold text-sm shadow-md shadow-primary/20 mt-4"
+            >
+              <ArrowLeftRight size={15} /> Go to Matching Workspace
+            </Link>
+          </div>
         ) : (
           <div className="text-center py-12">
             <ShieldCheck size={48} className="mx-auto text-emerald-400 mb-3" />
             <h4 className="font-bold text-emerald-700 font-headline text-lg">No Exception Items</h4>
             <p className="text-sm text-slate-500 mt-1 max-w-md mx-auto">
-              {assessments.length === 0
-                ? 'Run risk analysis from the Forensic Toolbox to detect high-risk transactions.'
-                : 'No high or medium-risk items were found. All transactions passed the forensic risk checks.'}
+              No high or medium-risk items were found. All transactions passed the forensic
+              risk checks.
             </p>
           </div>
         )}
@@ -281,6 +298,15 @@ export function ExceptionReport() {
           </p>
         </div>
       </div>
+
+      {assessments.length > 0 && (
+        <NextStepCTA
+          label="Export audit report"
+          description="Review is complete. Open Audit Vault to generate the signed PDF deliverable."
+          to="/vault"
+          icon={Archive}
+        />
+      )}
     </div>
   );
 }

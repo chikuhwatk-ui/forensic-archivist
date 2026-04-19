@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import {
   Archive,
@@ -8,6 +9,7 @@ import {
   CheckCircle2,
   ShieldCheck,
   Trash2,
+  ArrowLeftRight,
 } from 'lucide-react';
 import { DataTable, Column } from '../components/DataTable';
 import { RiskBadge } from '../components/RiskBadge';
@@ -177,6 +179,29 @@ export function AuditVault() {
         </div>
       </header>
 
+      {matches.length === 0 && (
+        <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 flex items-center gap-5">
+          <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+            <AlertTriangle size={22} />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-headline font-bold text-blue-950 text-lg">
+              Nothing to export yet
+            </h3>
+            <p className="text-sm text-slate-600 mt-1">
+              Audit Vault compiles the reconciliation summary and exception report into a
+              PDF. Run matching &amp; risk analysis first so there's something to include.
+            </p>
+          </div>
+          <Link
+            to="/matching"
+            className="bg-primary text-white px-4 py-2 rounded-lg font-headline font-bold text-sm flex items-center gap-2 shadow-md shadow-primary/20 shrink-0"
+          >
+            <ArrowLeftRight size={15} /> Go to Matching
+          </Link>
+        </div>
+      )}
+
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
         <StatCard
@@ -229,8 +254,14 @@ export function AuditVault() {
             maxHeight="350px"
           />
         ) : (
-          <div className="text-center py-12 text-slate-400 text-sm">
-            No reconciling items — run reconciliation first.
+          <div className="text-center py-10">
+            <p className="text-slate-400 text-sm">
+              No reconciling items.{' '}
+              <Link to="/matching" className="text-primary font-semibold hover:underline">
+                Run matching &amp; risk analysis
+              </Link>{' '}
+              to populate this section.
+            </p>
           </div>
         )}
       </motion.div>
@@ -258,8 +289,14 @@ export function AuditVault() {
             maxHeight="400px"
           />
         ) : (
-          <div className="text-center py-12 text-slate-400 text-sm">
-            No exception items — run risk analysis first.
+          <div className="text-center py-10">
+            <p className="text-slate-400 text-sm">
+              No exception items.{' '}
+              <Link to="/matching" className="text-primary font-semibold hover:underline">
+                Run matching &amp; risk analysis
+              </Link>{' '}
+              to populate this section.
+            </p>
           </div>
         )}
       </motion.div>

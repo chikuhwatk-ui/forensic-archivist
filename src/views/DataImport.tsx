@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { motion } from 'motion/react';
-import { CloudUpload, Plus, Trash2, Database, FileText } from 'lucide-react';
+import { CloudUpload, Plus, Trash2, Database, FileText, ArrowLeftRight } from 'lucide-react';
 import { FileUpload } from '../components/FileUpload';
 import { DataTable, Column } from '../components/DataTable';
+import { NextStepCTA } from '../components/NextStepCTA';
 import { useTransactionStore } from '../stores/transactionStore';
 import { useToastStore } from '../stores/toastStore';
 import { parseExcelFile } from '../lib/excelParser';
@@ -312,6 +313,25 @@ export function DataImport() {
             keyExtractor={(r) => r.id}
           />
         </div>
+      )}
+
+      {(bankTransactions.length > 0 || glTransactions.length > 0) && (
+        <NextStepCTA
+          label="Match & analyze risk"
+          description={
+            bankTransactions.length > 0 && glTransactions.length > 0
+              ? 'Both ledgers loaded. Go to Matching Workspace and run matching + forensic risk analysis.'
+              : 'Upload the remaining ledger, then continue to Matching Workspace.'
+          }
+          to="/matching"
+          icon={ArrowLeftRight}
+          disabled={bankTransactions.length === 0 || glTransactions.length === 0}
+          disabledHint={
+            bankTransactions.length === 0
+              ? 'Upload a bank statement to continue.'
+              : 'Upload a cashbook/GL file to continue.'
+          }
+        />
       )}
     </div>
   );

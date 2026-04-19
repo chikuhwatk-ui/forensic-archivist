@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
 import { ToastContainer } from './components/ToastContainer';
+import { JourneyStepper, WORKFLOW_ROUTES } from './components/JourneyStepper';
 import { Dashboard } from './views/Dashboard';
 import { DataImport } from './views/DataImport';
 import { MatchingWorkspace } from './views/MatchingWorkspace';
@@ -16,6 +17,12 @@ import { AuditVault } from './views/AuditVault';
 import { Settings } from './views/Settings';
 import { SampleData } from './views/SampleData';
 
+function MaybeStepper() {
+  const location = useLocation();
+  if (!WORKFLOW_ROUTES.includes(location.pathname)) return null;
+  return <JourneyStepper />;
+}
+
 export default function App() {
   return (
     <HashRouter>
@@ -24,6 +31,7 @@ export default function App() {
         <Sidebar />
         <TopBar />
         <main id="main-content" className="ml-64 pt-16 p-8" role="main">
+          <MaybeStepper />
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/import" element={<DataImport />} />

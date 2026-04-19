@@ -4,10 +4,8 @@ import { Link } from 'react-router-dom';
 import {
   CheckCircle2,
   AlertTriangle,
-  TrendingUp,
   Database,
   ArrowLeftRight,
-  Microscope,
   ShieldCheck,
   Flag,
   CloudUpload,
@@ -136,14 +134,13 @@ export function Dashboard() {
           animate={{ opacity: 1 }}
           className="bg-white border border-slate-200 rounded-xl p-8"
         >
-          <h3 className="font-bold text-slate-800 font-headline text-lg mb-6 text-center">Get Started in 5 Steps</h3>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <h3 className="font-bold text-slate-800 font-headline text-lg mb-6 text-center">Get Started in 4 Steps</h3>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {[
-              { step: 1, label: 'Import Data', desc: 'Upload bank statement & cashbook', icon: CloudUpload, to: '/import', active: true },
-              { step: 2, label: 'Match Transactions', desc: 'Auto-match bank with GL', icon: ArrowLeftRight, to: '/matching', active: false },
-              { step: 3, label: 'Review Reconciliation', desc: 'Classify reconciling items', icon: CheckCircle2, to: '/matching', active: false },
-              { step: 4, label: 'Run Risk Analysis', desc: 'Detect forensic red flags', icon: Microscope, to: '/forensic', active: false },
-              { step: 5, label: 'Export Reports', desc: 'Generate audit deliverables', icon: FileWarning, to: '/vault', active: false },
+              { step: 1, label: 'Import Data',      desc: 'Upload bank statement & cashbook',       icon: CloudUpload,     to: '/import',     active: true },
+              { step: 2, label: 'Match & Analyze',  desc: 'Auto-match and run risk detection',      icon: ArrowLeftRight,  to: '/matching',   active: false },
+              { step: 3, label: 'Review Exceptions',desc: 'Investigate flagged transactions',       icon: FileWarning,     to: '/exceptions', active: false },
+              { step: 4, label: 'Export Reports',   desc: 'Generate audit PDF deliverables',        icon: CheckCircle2,    to: '/vault',      active: false },
             ].map((item) => (
               <Link
                 key={item.step}
