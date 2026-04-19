@@ -17,6 +17,8 @@ import { ExceptionReport } from './views/ExceptionReport';
 import { AuditVault } from './views/AuditVault';
 import { Settings } from './views/Settings';
 import { SampleData } from './views/SampleData';
+import { UserGuide } from './views/UserGuide';
+import { TechOverview } from './views/TechOverview';
 
 function MaybeStepper() {
   const location = useLocation();
@@ -43,6 +45,8 @@ export default function App() {
             <Route path="/vault" element={<AuditVault />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/sample" element={<SampleData />} />
+            <Route path="/guide" element={<UserGuide />} />
+            <Route path="/tech" element={<TechOverview />} />
           </Routes>
         </main>
         <ToastContainer />

@@ -10,6 +10,8 @@ import {
   Settings,
   Plus,
   FlaskConical,
+  BookOpen,
+  Cpu,
 } from 'lucide-react';
 import { cn } from '../lib/cn';
 import { ConfirmDialog } from './ConfirmDialog';
@@ -27,6 +29,8 @@ const navItems = [
   { to: '/vault', label: 'Audit Vault', icon: Archive },
   { to: '/settings', label: 'Settings', icon: Settings },
   { to: '/sample', label: 'Sample Data', icon: FlaskConical },
+  { to: '/guide', label: 'User Guide', icon: BookOpen },
+  { to: '/tech', label: 'Tech Overview', icon: Cpu },
 ];
 
 export function Sidebar() {
