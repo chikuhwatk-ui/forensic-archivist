@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from 'react';
+import { Fragment, ReactNode, useMemo } from 'react';
 import { motion } from 'motion/react';
 import * as XLSX from 'xlsx';
 import {
@@ -19,7 +19,23 @@ interface SampleRow {
   Reference: string;
 }
 
-const BANK_ROWS: SampleRow[] = [
+interface SampleSet {
+  id: string;
+  label: string;
+  company: string;
+  period: string;
+  bankName: string;
+  bankFile: string;
+  glFile: string;
+  bankRows: SampleRow[];
+  glRows: SampleRow[];
+}
+
+// -----------------------------------------------------------------------------
+// SET 1 — Zambezi Trading (Pvt) Ltd — Month ending 31 March 2026
+// -----------------------------------------------------------------------------
+
+const SET1_BANK: SampleRow[] = [
   { Date: '2026-01-15', Description: 'Opening Balance Journal Adjustment',              Amount: 12500.00, Type: 'deposit', Reference: 'JE-2025-YE-001' },
   { Date: '2026-02-03', Description: 'Electricity Payment ZESA February',                Amount:   845.20, Type: 'payment', Reference: 'CHQ-10432' },
   { Date: '2026-03-02', Description: 'Customer Receipt INV-4452 Mazoe Gardens',          Amount:  8750.00, Type: 'deposit', Reference: 'DEP-0302A' },
@@ -47,7 +63,7 @@ const BANK_ROWS: SampleRow[] = [
   { Date: '2026-03-31', Description: 'Bank Service Fee Month End',                       Amount:    35.00, Type: 'payment', Reference: 'BC-EOM-25' },
 ];
 
-const GL_ROWS: SampleRow[] = [
+const SET1_GL: SampleRow[] = [
   { Date: '2026-02-03', Description: 'Electricity Expense ZESA Feb',                     Amount:   845.20, Type: 'payment', Reference: 'GL-EXP-2039' },
   { Date: '2026-03-02', Description: 'Sales Invoice INV-4452 Mazoe Gardens',             Amount:  8750.00, Type: 'deposit', Reference: 'GL-REV-3301' },
   { Date: '2026-03-03', Description: 'Stationery Expense Office Depot',                  Amount:   267.85, Type: 'payment', Reference: 'GL-EXP-3302' },
@@ -73,6 +89,91 @@ const GL_ROWS: SampleRow[] = [
   { Date: '2026-03-30', Description: 'Supplier Makoni Packaging INV-B',                  Amount:  1800.00, Type: 'payment', Reference: 'CHQ-10447' },
   { Date: '2026-03-31', Description: 'Cheque Issued Audit Fees KPMG',                    Amount:  8500.00, Type: 'payment', Reference: 'CHQ-10449' },
   { Date: '2026-03-31', Description: 'Cheque Issued Supplier Makoni',                    Amount:  2450.00, Type: 'payment', Reference: 'CHQ-10448' },
+];
+
+// -----------------------------------------------------------------------------
+// SET 2 — Kopje Mining Supplies (Pvt) Ltd — Month ending 28 February 2026
+// -----------------------------------------------------------------------------
+
+const SET2_BANK: SampleRow[] = [
+  { Date: '2025-12-30', Description: 'Year End Journal Adjustment Inventory',            Amount:  8500.00, Type: 'deposit', Reference: 'JE-2025-YE-044' },
+  { Date: '2026-01-08', Description: 'EFT Credit Zimplats Holdings',                     Amount: 42500.00, Type: 'deposit', Reference: 'EFT-ZIM-0108' },
+  { Date: '2026-01-12', Description: 'Bank Charge RTGS Processing',                      Amount:   125.00, Type: 'payment', Reference: 'BC-RTGS-01' },
+  { Date: '2026-02-02', Description: 'Deposit Mimosa Mining INV-7701',                   Amount: 18750.00, Type: 'deposit', Reference: 'DEP-0202' },
+  { Date: '2026-02-03', Description: 'POS Dulys Motors Service',                         Amount:  1275.40, Type: 'payment', Reference: 'POS-020301' },
+  { Date: '2026-02-04', Description: 'Bank Service Fee February',                        Amount:    55.00, Type: 'payment', Reference: 'BC-FEB-01' },
+  { Date: '2026-02-05', Description: 'EFT Credit RioZim Limited',                        Amount: 67800.00, Type: 'deposit', Reference: 'EFT-RZ-0205' },
+  { Date: '2026-02-06', Description: 'Salaries Wage Roll February',                      Amount: 28900.00, Type: 'payment', Reference: 'PAY-FEB-01' },
+  { Date: '2026-02-09', Description: 'Customer Deposit Masimba Holdings',                Amount: 11200.00, Type: 'deposit', Reference: 'DEP-0209' },
+  { Date: '2026-02-10', Description: 'Rent Payment Bulawayo Industrial Park',            Amount:  4500.00, Type: 'payment', Reference: 'CHQ-20140' },
+  { Date: '2026-02-11', Description: 'Interest Earned Credit',                           Amount:   215.80, Type: 'deposit', Reference: 'INT-FEB' },
+  { Date: '2026-02-12', Description: 'Supplier Payment Tanganda Ltd',                    Amount:  3420.75, Type: 'payment', Reference: 'CHQ-20141' },
+  { Date: '2026-02-13', Description: 'Cash Sales Depot Week 6',                          Amount:  7840.00, Type: 'deposit', Reference: 'DEP-CS-06' },
+  { Date: '2026-02-16', Description: 'Insurance Premium Zimnat',                         Amount:  1850.00, Type: 'payment', Reference: 'DO-ZN-02' },
+  { Date: '2026-02-17', Description: 'Wire Transfer In Zambian Distributor',             Amount: 95000.00, Type: 'deposit', Reference: 'WT-ZM-0217' },
+  { Date: '2026-02-18', Description: 'POS Fuel Total Energies',                          Amount:   425.60, Type: 'payment', Reference: 'POS-021801' },
+  { Date: '2026-02-19', Description: 'Supplier Payment Art Corporation',                 Amount:  8750.00, Type: 'payment', Reference: 'CHQ-20143' },
+  { Date: '2026-02-20', Description: 'Foreign Exchange Charge USD-ZAR',                  Amount:    92.30, Type: 'payment', Reference: 'BC-FX-0220' },
+  { Date: '2026-02-23', Description: 'EFT Credit Fossil Contracting',                    Amount: 32000.00, Type: 'deposit', Reference: 'EFT-FC-0223' },
+  { Date: '2026-02-24', Description: 'Supplier Payment TelOne Telecoms',                 Amount:  2180.50, Type: 'payment', Reference: 'DO-TO-02' },
+  { Date: '2026-02-25', Description: 'Cash Deposit Branch Takings',                      Amount:  5620.00, Type: 'deposit', Reference: 'DEP-BR-25' },
+  { Date: '2026-02-26', Description: 'Returned Deposit RTGS Failed',                     Amount:  3400.00, Type: 'payment', Reference: 'RTN-0226' },
+  { Date: '2026-02-27', Description: 'EFT Out Advertising Media Buy',                    Amount:  6200.00, Type: 'payment', Reference: 'EFT-MKT-0227' },
+  { Date: '2026-02-27', Description: 'EFT Out Advertising Media Buy',                    Amount:  6200.00, Type: 'payment', Reference: 'EFT-MKT-0228' },
+  { Date: '2026-02-28', Description: 'Month End Service Charge',                         Amount:    48.00, Type: 'payment', Reference: 'BC-EOM-28' },
+];
+
+const SET2_GL: SampleRow[] = [
+  { Date: '2026-01-08', Description: 'Sales Invoice Zimplats INV-7622',                  Amount: 42500.00, Type: 'deposit', Reference: 'GL-REV-0108' },
+  { Date: '2026-02-02', Description: 'Sales Receipt Mimosa Mining INV-7701',             Amount: 18750.00, Type: 'deposit', Reference: 'GL-REV-0202' },
+  { Date: '2026-02-03', Description: 'Vehicle Service Expense Dulys Motors',             Amount:  1275.40, Type: 'payment', Reference: 'GL-EXP-0203' },
+  { Date: '2026-02-05', Description: 'Export Sales RioZim Contract 2026',                Amount: 67800.00, Type: 'deposit', Reference: 'GL-REV-0205' },
+  { Date: '2026-02-06', Description: 'Payroll February 2026',                            Amount: 28900.00, Type: 'payment', Reference: 'GL-PAY-0206' },
+  { Date: '2026-02-09', Description: 'Receipt Masimba Holdings',                         Amount: 11200.00, Type: 'deposit', Reference: 'GL-REV-0209' },
+  { Date: '2026-02-10', Description: 'Rent Bulawayo Industrial Park Feb',                Amount:  4500.00, Type: 'payment', Reference: 'GL-EXP-0210' },
+  { Date: '2026-02-12', Description: 'AP Tanganda Ltd Invoice T-4421',                   Amount:  3420.75, Type: 'payment', Reference: 'GL-AP-0212' },
+  { Date: '2026-02-13', Description: 'Cash Sales Depot Wk6',                             Amount:  7840.00, Type: 'deposit', Reference: 'GL-REV-0213' },
+  { Date: '2026-02-14', Description: 'Journal Entry Depreciation PPE Feb',               Amount:  3650.00, Type: 'payment', Reference: 'JE-DEP-FEB-2026' },
+  { Date: '2026-02-16', Description: 'Insurance Expense Zimnat Premium',                 Amount:  1850.00, Type: 'payment', Reference: 'GL-EXP-0216' },
+  { Date: '2026-02-17', Description: 'Export Receipt Zambian Distributor',               Amount: 95000.00, Type: 'deposit', Reference: 'GL-REV-0217' },
+  { Date: '2026-02-18', Description: 'Motor Vehicle Fuel Total Energies',                Amount:   425.60, Type: 'payment', Reference: 'GL-EXP-0218' },
+  { Date: '2026-02-19', Description: 'AP Art Corporation Printing',                      Amount:  8750.00, Type: 'payment', Reference: 'GL-AP-0219' },
+  { Date: '2026-02-20', Description: "Director's Fees January and February",             Amount:120000.00, Type: 'payment', Reference: 'DIR-FEES-2026' },
+  { Date: '2026-02-23', Description: 'Subcontract Receipt Fossil Contracting',           Amount: 32000.00, Type: 'deposit', Reference: 'GL-REV-0223' },
+  { Date: '2026-02-24', Description: 'Telecoms Expense TelOne',                          Amount:  2180.50, Type: 'payment', Reference: 'GL-EXP-0224' },
+  { Date: '2026-02-25', Description: 'Branch Takings Remittance Bulawayo',               Amount:  5620.00, Type: 'deposit', Reference: 'GL-REV-0225' },
+  { Date: '2026-02-27', Description: 'Marketing Media Buy Advertising A',                Amount:  6200.00, Type: 'payment', Reference: 'EFT-MKT-0227' },
+  { Date: '2026-02-27', Description: 'Marketing Media Buy Advertising B',                Amount:  6200.00, Type: 'payment', Reference: 'EFT-MKT-0228' },
+  { Date: '2026-02-27', Description: 'Manual Adjustment Inventory Recount',              Amount: 22000.00, Type: 'payment', Reference: 'JE-2026-FEB-08' },
+  { Date: '2026-02-28', Description: 'Deposit in Transit Chiredzi Branch',               Amount:  9180.00, Type: 'deposit', Reference: 'GL-REV-0228' },
+  { Date: '2026-02-28', Description: 'Cheque Issued Legal Fees Zhou and Partners',       Amount:  7500.00, Type: 'payment', Reference: 'CHQ-20155' },
+  { Date: '2026-02-28', Description: 'Cheque Issued Spare Parts Supplier',               Amount:  3280.00, Type: 'payment', Reference: 'CHQ-20156' },
+  { Date: '2026-02-28', Description: 'Correction Entry AR Sub-ledger',                   Amount:  1450.00, Type: 'payment', Reference: 'JE-2026-FEB-09' },
+];
+
+const SETS: SampleSet[] = [
+  {
+    id: 'set1',
+    label: 'Set 1',
+    company: 'Zambezi Trading (Pvt) Ltd',
+    period: 'Month ending 31 March 2026',
+    bankName: 'First Capital Bank — Gold Business Account',
+    bankFile: 'Bank_Statement_March2026.xlsx',
+    glFile: 'Cashbook_GL_March2026.xlsx',
+    bankRows: SET1_BANK,
+    glRows: SET1_GL,
+  },
+  {
+    id: 'set2',
+    label: 'Set 2',
+    company: 'Kopje Mining Supplies (Pvt) Ltd',
+    period: 'Month ending 28 February 2026',
+    bankName: 'Stanbic Bank — Corporate Current Account',
+    bankFile: 'Bank_Statement_February2026.xlsx',
+    glFile: 'Cashbook_GL_February2026.xlsx',
+    bankRows: SET2_BANK,
+    glRows: SET2_GL,
+  },
 ];
 
 function downloadXlsx(rows: SampleRow[], sheetName: string, fileName: string) {
@@ -132,108 +233,142 @@ const columns: Column<SampleRow>[] = [
   { key: 'Reference', header: 'Reference', className: 'w-36 font-mono text-xs' },
 ];
 
+const fmt = (n: number) =>
+  n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
 export function SampleData() {
   const addToast = useToastStore((s) => s.addToast);
 
-  const bankTotals = useMemo(() => {
-    const deposits = BANK_ROWS.filter((r) => r.Type === 'deposit').reduce((s, r) => s + r.Amount, 0);
-    const payments = BANK_ROWS.filter((r) => r.Type === 'payment').reduce((s, r) => s + r.Amount, 0);
-    return { deposits, payments, net: deposits - payments };
-  }, []);
-
-  const glTotals = useMemo(() => {
-    const deposits = GL_ROWS.filter((r) => r.Type === 'deposit').reduce((s, r) => s + r.Amount, 0);
-    const payments = GL_ROWS.filter((r) => r.Type === 'payment').reduce((s, r) => s + r.Amount, 0);
-    return { deposits, payments, net: deposits - payments };
-  }, []);
-
-  const handleDownloadBank = () => {
-    downloadXlsx(BANK_ROWS, 'Bank Statement', 'Bank_Statement_March2026.xlsx');
+  const onDownload = (rows: SampleRow[], sheet: string, file: string, label: string) => {
+    downloadXlsx(rows, sheet, file);
     addToast({
       type: 'success',
-      title: 'Bank statement downloaded',
-      message: `${BANK_ROWS.length} transactions saved to Bank_Statement_March2026.xlsx`,
+      title: `${label} downloaded`,
+      message: `${rows.length} transactions saved to ${file}`,
     });
   };
-
-  const handleDownloadGL = () => {
-    downloadXlsx(GL_ROWS, 'Cashbook', 'Cashbook_GL_March2026.xlsx');
-    addToast({
-      type: 'success',
-      title: 'Cashbook downloaded',
-      message: `${GL_ROWS.length} transactions saved to Cashbook_GL_March2026.xlsx`,
-    });
-  };
-
-  const fmt = (n: number) =>
-    n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="space-y-6"
+      className="space-y-8"
     >
-      <header className="flex items-start justify-between">
-        <div>
-          <div className="flex items-center gap-2 text-slate-500 text-xs uppercase tracking-[0.2em] font-bold">
-            <FlaskConical size={14} /> Demo Toolkit
-          </div>
-          <h1 className="font-headline font-bold text-3xl text-blue-950 mt-1">
-            Sample Data
-          </h1>
-          <p className="text-slate-600 mt-2 max-w-2xl">
-            Download a matched pair of realistic statements for{' '}
-            <span className="font-semibold">Zambezi Trading (Pvt) Ltd</span>, period
-            ending 31 March 2026. Import both files via{' '}
-            <span className="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">
-              /import
-            </span>{' '}
-            to exercise matching, reconciliation, and forensic risk detection.
-          </p>
+      <header>
+        <div className="flex items-center gap-2 text-slate-500 text-xs uppercase tracking-[0.2em] font-bold">
+          <FlaskConical size={14} /> Demo Toolkit
         </div>
+        <h1 className="font-headline font-bold text-3xl text-blue-950 mt-1">
+          Sample Data
+        </h1>
+        <p className="text-slate-600 mt-2 max-w-2xl">
+          Two independent reconciliation scenarios. Each set contains a matched
+          bank statement and cashbook/GL — import both files in one set via{' '}
+          <span className="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">
+            /import
+          </span>{' '}
+          to exercise matching, reconciliation, and forensic risk detection.
+        </p>
       </header>
 
       <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-4 flex gap-3">
         <Info size={18} className="text-amber-700 shrink-0 mt-0.5" />
         <div className="text-sm text-amber-900 leading-relaxed">
-          <div className="font-semibold mb-1">Demo-only dataset</div>
-          This dataset is designed to trigger every downstream feature: exact and fuzzy
-          matches, deposits in transit, outstanding payments, bank charges, direct
-          deposits, plus aging, large-amount, round-figure, duplicate, year-end, and
-          manual-journal risk flags. All names and references are fictional.
+          <div className="font-semibold mb-1">Demo-only datasets</div>
+          Both sets are engineered to trigger every downstream feature: exact and
+          fuzzy matches, deposits in transit, outstanding payments, bank charges,
+          direct deposits, plus aging, large-amount, round-figure, duplicate,
+          year-end, and manual-journal risk flags. All names and references are
+          fictional.
+        </div>
+      </div>
+
+      {SETS.map((set) => (
+        <Fragment key={set.id}>
+          <SetSection
+            set={set}
+            onDownloadBank={() =>
+              onDownload(set.bankRows, 'Bank Statement', set.bankFile, 'Bank statement')
+            }
+            onDownloadGL={() =>
+              onDownload(set.glRows, 'Cashbook', set.glFile, 'Cashbook')
+            }
+          />
+        </Fragment>
+      ))}
+    </motion.div>
+  );
+}
+
+interface SetSectionProps {
+  set: SampleSet;
+  onDownloadBank: () => void;
+  onDownloadGL: () => void;
+}
+
+function SetSection({ set, onDownloadBank, onDownloadGL }: SetSectionProps) {
+  const bankTotals = useMemo(() => totals(set.bankRows), [set.bankRows]);
+  const glTotals = useMemo(() => totals(set.glRows), [set.glRows]);
+
+  return (
+    <section className="space-y-4">
+      <div className="flex items-end justify-between border-b border-slate-200 pb-3">
+        <div>
+          <div className="text-[11px] uppercase tracking-[0.2em] font-bold text-primary">
+            {set.label}
+          </div>
+          <h2 className="font-headline font-bold text-xl text-blue-950 mt-0.5">
+            {set.company}
+          </h2>
+          <p className="text-sm text-slate-500 mt-0.5">{set.period}</p>
+        </div>
+        <div className="text-xs text-slate-500 text-right">
+          <div>
+            <span className="font-semibold text-slate-700">{set.bankRows.length}</span>{' '}
+            bank rows
+          </div>
+          <div>
+            <span className="font-semibold text-slate-700">{set.glRows.length}</span>{' '}
+            GL rows
+          </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DatasetCard
           title="Bank Statement"
-          subtitle="First Capital Bank — Gold Business Account"
+          subtitle={set.bankName}
           icon={<Landmark size={20} />}
           accent="bg-blue-900 text-white"
-          rowCount={BANK_ROWS.length}
+          rowCount={set.bankRows.length}
           deposits={fmt(bankTotals.deposits)}
           payments={fmt(bankTotals.payments)}
-          rows={BANK_ROWS}
-          fileName="Bank_Statement_March2026.xlsx"
-          onDownload={handleDownloadBank}
+          rows={set.bankRows}
+          fileName={set.bankFile}
+          onDownload={onDownloadBank}
         />
         <DatasetCard
           title="Cashbook / General Ledger"
-          subtitle="Zambezi Trading (Pvt) Ltd — Cash & Bank Ledger"
+          subtitle={`${set.company} — Cash & Bank Ledger`}
           icon={<BookOpen size={20} />}
           accent="bg-emerald-800 text-white"
-          rowCount={GL_ROWS.length}
+          rowCount={set.glRows.length}
           deposits={fmt(glTotals.deposits)}
           payments={fmt(glTotals.payments)}
-          rows={GL_ROWS}
-          fileName="Cashbook_GL_March2026.xlsx"
-          onDownload={handleDownloadGL}
+          rows={set.glRows}
+          fileName={set.glFile}
+          onDownload={onDownloadGL}
         />
       </div>
-    </motion.div>
+    </section>
   );
+}
+
+function totals(rows: SampleRow[]) {
+  const deposits = rows.filter((r) => r.Type === 'deposit').reduce((s, r) => s + r.Amount, 0);
+  const payments = rows.filter((r) => r.Type === 'payment').reduce((s, r) => s + r.Amount, 0);
+  return { deposits, payments };
 }
 
 interface DatasetCardProps {
@@ -270,9 +405,9 @@ function DatasetCard({
               {icon}
             </div>
             <div>
-              <h2 className="font-headline font-bold text-lg text-blue-950 leading-tight">
+              <h3 className="font-headline font-bold text-lg text-blue-950 leading-tight">
                 {title}
-              </h2>
+              </h3>
               <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>
             </div>
           </div>
