@@ -11,10 +11,24 @@ import {
   Archive,
   Settings as SettingsIcon,
   FlaskConical,
+  Download,
   LucideIcon,
 } from 'lucide-react';
+import { generateUserGuidePdf } from '../lib/guidePdf';
+import { useToastStore } from '../stores/toastStore';
 
 export function UserGuide() {
+  const addToast = useToastStore((s) => s.addToast);
+
+  const handleDownload = () => {
+    generateUserGuidePdf();
+    addToast({
+      type: 'success',
+      title: 'User Guide downloaded',
+      message: 'Saved as forensic-archivist-user-guide.pdf.',
+    });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -22,18 +36,27 @@ export function UserGuide() {
       transition={{ duration: 0.25 }}
       className="space-y-8 max-w-4xl"
     >
-      <header>
-        <div className="flex items-center gap-2 text-slate-500 text-xs uppercase tracking-[0.2em] font-bold">
-          <BookOpen size={14} /> User Guide
+      <header className="flex items-start justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 text-slate-500 text-xs uppercase tracking-[0.2em] font-bold">
+            <BookOpen size={14} /> User Guide
+          </div>
+          <h1 className="font-headline font-bold text-3xl text-blue-950 mt-1">
+            How to use Forensic Archivist
+          </h1>
+          <p className="text-slate-600 mt-2">
+            A screen-by-screen walkthrough of the full reconciliation journey —
+            designed so an auditor can pick up the tool cold and know exactly what
+            each view is for.
+          </p>
         </div>
-        <h1 className="font-headline font-bold text-3xl text-blue-950 mt-1">
-          How to use Forensic Archivist
-        </h1>
-        <p className="text-slate-600 mt-2">
-          A screen-by-screen walkthrough of the full reconciliation journey —
-          designed so an auditor can pick up the tool cold and know exactly what
-          each view is for.
-        </p>
+        <button
+          onClick={handleDownload}
+          className="bg-primary text-white px-4 py-2.5 rounded-lg font-headline font-bold text-sm flex items-center gap-2 shadow-md shadow-primary/20 shrink-0"
+        >
+          <Download size={15} />
+          Download PDF
+        </button>
       </header>
 
       {/* Workflow at a glance */}

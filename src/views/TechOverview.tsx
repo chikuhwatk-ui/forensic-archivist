@@ -14,10 +14,24 @@ import {
   Calculator,
   Database,
   Lock,
+  Download,
   LucideIcon,
 } from 'lucide-react';
+import { generateTechOverviewPdf } from '../lib/guidePdf';
+import { useToastStore } from '../stores/toastStore';
 
 export function TechOverview() {
+  const addToast = useToastStore((s) => s.addToast);
+
+  const handleDownload = () => {
+    generateTechOverviewPdf();
+    addToast({
+      type: 'success',
+      title: 'Tech Overview downloaded',
+      message: 'Saved as forensic-archivist-tech-overview.pdf.',
+    });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -25,17 +39,26 @@ export function TechOverview() {
       transition={{ duration: 0.25 }}
       className="space-y-8 max-w-4xl"
     >
-      <header>
-        <div className="flex items-center gap-2 text-slate-500 text-xs uppercase tracking-[0.2em] font-bold">
-          <Cpu size={14} /> How it works
+      <header className="flex items-start justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 text-slate-500 text-xs uppercase tracking-[0.2em] font-bold">
+            <Cpu size={14} /> How it works
+          </div>
+          <h1 className="font-headline font-bold text-3xl text-blue-950 mt-1">
+            Technical Overview
+          </h1>
+          <p className="text-slate-600 mt-2">
+            The tech stack behind the app and the rules each engine follows —
+            written for a reviewer or audit manager, not a developer.
+          </p>
         </div>
-        <h1 className="font-headline font-bold text-3xl text-blue-950 mt-1">
-          Technical Overview
-        </h1>
-        <p className="text-slate-600 mt-2">
-          The tech stack behind the app and the rules each engine follows —
-          written for a reviewer or audit manager, not a developer.
-        </p>
+        <button
+          onClick={handleDownload}
+          className="bg-primary text-white px-4 py-2.5 rounded-lg font-headline font-bold text-sm flex items-center gap-2 shadow-md shadow-primary/20 shrink-0"
+        >
+          <Download size={15} />
+          Download PDF
+        </button>
       </header>
 
       {/* Stack */}
