@@ -13,6 +13,7 @@
     "preview": "vite preview",
     "clean": "rm -rf dist dist-electron",
     "lint": "tsc --noEmit",
+    "build:icons": "node scripts/build-icons.mjs",
     "electron:compile": "tsc -p electron/tsconfig.json && echo {\"type\":\"commonjs\"} > dist-electron/package.json",
     "electron:dev": "npm run electron:compile && concurrently \"npm run dev\" \"wait-on http://localhost:3000 && electron dist-electron/main.js\"",
     "electron:start": "npm run electron:compile && electron dist-electron/main.js",
@@ -48,6 +49,8 @@
     "concurrently": "^9.2.1",
     "electron": "^41.1.1",
     "electron-builder": "^26.8.1",
+    "png-to-ico": "^3.0.1",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",
@@ -67,7 +70,7 @@
     "win": {
       "target": [
         {
-          "target": "nsis",
+          "target": "portable",
           "arch": [
             "x64"
           ]
@@ -75,11 +78,8 @@
       ],
       "icon": "build/icon.ico"
     },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
+    "portable": {
+      "artifactName": "ForensicArchivist-${version}-portable.exe"
     },
     "mac": {
       "target": [
